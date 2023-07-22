@@ -1,4 +1,4 @@
-import { createAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
+import { createAuthUserWithEmailAndPassword,createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
 import FormInput from "../form-input/form-input.component";
 import "./sign-up-form.styles.scss"
 import Button from "../button/button.component";
@@ -23,7 +23,9 @@ const SignUpForm = () => {
         const oCurrentState = getUserEnteredValues(aHtmlFormInstance);
         if (oCurrentState.password !== oCurrentState.confirmPassword) return;
         try {
-            const oResponse = await createAuthUserWithEmailAndPassword(oCurrentState.email, oCurrentState.password);
+            const displayName = oCurrentState.name;
+            const {user} = await createAuthUserWithEmailAndPassword(oCurrentState.email, oCurrentState.password);
+            await createUserDocumentFromAuth(user,{displayName});
             setFormDetails(oDefaultFormFields);
         } catch (error) {
         }

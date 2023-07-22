@@ -1,7 +1,9 @@
+import { useState,useContext } from "react";
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 import { signInWithGooglePopup,createUserDocumentFromAuth,signInAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
-import { useState } from "react";
+import { UserContext } from "../contexts/user.context";
+
 import "./sign-in-form.styles.scss"
 
 const SignInForm = () => {
@@ -9,6 +11,7 @@ const SignInForm = () => {
         email: "",
         password: ""
     };
+
     const [formFields,setFormDetails] = useState(oDefaultFormFields);
     const resetFormFields = () =>{
         setFormDetails(oDefaultFormFields);
@@ -18,9 +21,7 @@ const SignInForm = () => {
         const aHtmlFormInstance = Array.from(oEvent.target);
         const oCurrentState = getUserEnteredValues(aHtmlFormInstance);
         try {
-            const response = await signInAuthUserWithEmailAndPassword(oCurrentState.email,oCurrentState.password);
-            console.log("my response",response);
-            const userDocRef = await createUserDocumentFromAuth(response.user);
+            await signInAuthUserWithEmailAndPassword(oCurrentState.email,oCurrentState.password);
             resetFormFields();
         } catch (error) {
             console.log(error);
@@ -34,8 +35,7 @@ const SignInForm = () => {
         return oValues;
     }
     const signUsingWithGooglePopup = async() => {
-        const response = await signInWithGooglePopup();
-        const userDocRef = await createUserDocumentFromAuth(response.user);
+        await signInWithGooglePopup();
     }
     const onChangeHandler = (oEvent) => {
         const {name,value} = oEvent.target;
