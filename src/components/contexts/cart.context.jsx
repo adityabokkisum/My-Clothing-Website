@@ -1,6 +1,45 @@
-import { createContext, useState} from "react";
+import { createContext, useReducer} from "react";
+import { createAction } from "../../utils/Reduce/Reduce.utils";
 
-const addCardItem = (productToAdd,cartItems) => {
+const CART_ACTION_TYPES = {
+    ADD_CART_ITEM: "ADD_CART_ITEM",
+    REMOVE_CART_ITEM: "REMOVE_CART_ITEM",
+    TOGGLE_STATE: "TOGGLE_STATE"
+}
+
+const INIT_STATE = {
+    toggleState: false,
+    cartItems:[]
+}
+
+const cartReducer = (state,action) => {
+    const {type,payload} = action;
+    let newCartItems = [];
+    switch (type) {
+        case CART_ACTION_TYPES.ADD_CART_ITEM:
+            newCartItems = addCardItem(payload,state);
+            return {
+                ...state,
+                cartItems: newCartItems
+            }
+        case CART_ACTION_TYPES.REMOVE_CART_ITEM:
+            newCartItems = removeCartItem(payload,state);
+            return {
+                ...state,
+                cartItems: newCartItems
+            }
+        case CART_ACTION_TYPES.TOGGLE_STATE:
+            return {
+                ...state,
+                toggleState: payload
+            }
+        default:
+        return new Error(`Unhandled type of ${type} cartReducer`);
+    }
+}
+
+
+const addCardItem = (productToAdd,{cartItems}) => {
 
     const matchedItem = cartItems.find((item)=> {
         return item.id === productToAdd.id;
@@ -11,12 +50,13 @@ const addCardItem = (productToAdd,cartItems) => {
    return [...cartItems,{...productToAdd,quantity:1}];
 }
 
-const removeCartItem = (id,cartItems,bRemoveTotalItem,setCartItems) => {
+const removeCartItem = ({bRemoveTotalItem,id},{cartItems}) => {
+
     let newCartItems = structuredClone(cartItems);
     const {index,item} = getItemById(id,cartItems);
     const bRemoveItem = bRemoveTotalItem || item.quantity === 1;
     (bRemoveItem) ? newCartItems.splice(index,1) : newCartItems[index].quantity--;
-    setCartItems(newCartItems);
+    return newCartItems;
 }
 
 const getItemById = (id,cartItems) => {
@@ -35,13 +75,15 @@ export const CartContext = createContext({
 });
 
 export const CartProvider = ({children}) => {
-    const [toggleState,setToggleState] = useState(false);
-    const [cartItems,setCartItems] = useState([]);
+    const [{cartItems,toggleState},dispatch] = useReducer(cartReducer,INIT_STATE);
     const addItemToCart = (productToAdd) => {
-        setCartItems(addCardItem(productToAdd,cartItems));
+        dispatch(createAction(CART_ACTION_TYPES.ADD_CART_ITEM,productToAdd));
     }
     const removeItemFromCart = (id,bRemoveTotalItem) => {
-        removeCartItem(id,cartItems,bRemoveTotalItem,setCartItems);
+        dispatch(createAction(CART_ACTION_TYPES.REMOVE_CART_ITEM,{id,bRemoveTotalItem}));
+    }
+    const setToggleState = (state) => {
+        dispatch(createAction(CART_ACTION_TYPES.TOGGLE_STATE,state))
     }
     const value = {toggleState,setToggleState,addItemToCart,cartItems,removeItemFromCart};
     return <CartContext.Provider value = {value}>{children}</CartContext.Provider>
