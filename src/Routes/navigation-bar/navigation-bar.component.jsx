@@ -11,7 +11,6 @@ import { CartContext } from "../../components/contexts/cart.context"
 const NavigationBar = () => {
   const {currentUser} = useContext(UserContext);
   const {toggleState} = useContext(CartContext)
-  console.log("navigationbar",currentUser);
     return (
       <Fragment>
         <div className="navigation">

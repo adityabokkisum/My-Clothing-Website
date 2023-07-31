@@ -34,7 +34,6 @@ export const addCollectionDocuments = async (collectionKey,objectstoAdd) => {
     const docRef = doc(collectionRef,element.title.toLowerCase());
     batch.set(docRef,element);
   });
-  console.log("done");
   await batch.commit();
 }
 
@@ -68,7 +67,6 @@ export const createUserDocumentFromAuth = async (userAuth) => {
         createdAt
       });
     } catch (error) {
-      console.log("error creating the user",error.message)
     }
   }
   return userDocRef;

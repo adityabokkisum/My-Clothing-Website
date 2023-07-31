@@ -5,7 +5,6 @@ import CheckOutItem from "../../components/checkout-item/checkout-item.component
 
 const CheckOut = () => {
     const {cartItems} = useContext(CartContext);
-    console.log(cartItems);
     const totalAmount = cartItems.reduce((acc,curr)=>curr.quantity * curr.price + acc,0);
     return (
         <div className="checkout-container">

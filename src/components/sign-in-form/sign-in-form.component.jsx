@@ -24,7 +24,6 @@ const SignInForm = () => {
             await signInAuthUserWithEmailAndPassword(oCurrentState.email,oCurrentState.password);
             resetFormFields();
         } catch (error) {
-            console.log(error);
         }
     }
     const getUserEnteredValues = (aUserEnteredValues) => {

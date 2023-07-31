@@ -11,10 +11,8 @@ export const CategoriesProvider = ({children}) => {
     const [categoriesMap,setCategoriesMap] = useState({});
     useEffect(()=>{
         getCategoriesAndDocuments().then((categoryMap)=>{
-            console.log("category-context",categoriesMap)
             setCategoriesMap(categoryMap);
         }).catch((oError)=>{
-            console.log(oError);
         })
     },[]);
     const value = {categoriesMap}
