@@ -4,8 +4,22 @@ import NavigationBar from "./Routes/navigation-bar/navigation-bar.component"
 import Authentication from "./Routes/authentication/authentication.component"
 import Shop from "./Routes/shop/shop.component"
 import CheckOut from "./Routes/checkout/checkout.component"
+import { useEffect } from "react"
+import { createUserDocumentFromAuth, onAuthChangeHandler } from "./utils/firebase/firebase.utils"
+import { setCurrentUser } from "./store/user/user.action"
+import { useDispatch } from "react-redux"
 
 const App = () => {
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    const unSubsriber = onAuthChangeHandler((user)=>{
+        if (user) {
+            createUserDocumentFromAuth(user);
+        }
+        dispatch(setCurrentUser(user));
+    });
+    return unSubsriber;
+  },[]);
   return (
     <Routes>
       <Route path="/" element = {<NavigationBar/>}>
