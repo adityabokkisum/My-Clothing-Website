@@ -4,8 +4,9 @@ import logger from "redux-logger";
 import { rootReducer } from "./root-reducer";
 import {persistReducer,persistStore} from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import thunk from "redux-thunk";
 
-const middleWares = [process.env.NODE_ENV !== "production" && logger].filter(Boolean)
+const middleWares = [process.env.NODE_ENV !== "production" && logger,thunk].filter(Boolean)
 
 //TODO: Remove the redux persist and use instead firebase
 const persistConfig = {

@@ -5,15 +5,12 @@ import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux"
 
 import "./shop.styles.scss"
-import { setCategories } from "../../store/categories/categories.action";
-import { getCategoriesAndDocuments } from "../../utils/firebase/firebase.utils";
+import { fetchCategoriesAsync } from "../../store/categories/categories.action";
 
 const Shop = () => {
   const dispatch = useDispatch();
     useEffect(()=> {
-        getCategoriesAndDocuments().then((categoriesArray)=>{
-            dispatch(setCategories(categoriesArray));
-          })
+        dispatch(fetchCategoriesAsync)
     },[])
     return(
    <Routes>
