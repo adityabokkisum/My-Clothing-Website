@@ -5,20 +5,14 @@ import Authentication from "./Routes/authentication/authentication.component"
 import Shop from "./Routes/shop/shop.component"
 import CheckOut from "./Routes/checkout/checkout.component"
 import { useEffect } from "react"
-import { createUserDocumentFromAuth, onAuthChangeHandler } from "./utils/firebase/firebase.utils"
-import { setCurrentUser } from "./store/user/user.action"
+import { getCurrentUser} from "./utils/firebase/firebase.utils"
 import { useDispatch } from "react-redux"
+import { checkUserSession } from "./store/user/user.action"
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(()=>{
-    const unSubsriber = onAuthChangeHandler((user)=>{
-        if (user) {
-            createUserDocumentFromAuth(user);
-        }
-        dispatch(setCurrentUser(user));
-    });
-    return unSubsriber;
+   dispatch(checkUserSession());
   },[]);
   return (
     <Routes>

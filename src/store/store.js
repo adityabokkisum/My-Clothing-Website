@@ -4,15 +4,19 @@ import logger from "redux-logger";
 import { rootReducer } from "./root-reducer";
 import {persistReducer,persistStore} from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import thunk from "redux-thunk";
+import { rootSaga } from "./root-saga";
+import createSagaMiddleWare from "redux-saga"
 
-const middleWares = [process.env.NODE_ENV !== "production" && logger,thunk].filter(Boolean)
+const sagaMiddleWare = createSagaMiddleWare();
+
+const middleWares = [process.env.NODE_ENV !== "production" && logger,sagaMiddleWare].filter(Boolean)
+
 
 //TODO: Remove the redux persist and use instead firebase
 const persistConfig = {
     key: "root",
     storage,
-    blacklist: ["user"]
+    whitelist: ["cart"]
 }
 
 const persistedReducer = persistReducer(persistConfig,rootReducer);
@@ -22,5 +26,7 @@ const composeEnhancer = (process.env.NODE_ENV !== "production" && window && wind
 const composedEnhancers = composeEnhancer(applyMiddleware(...middleWares));
 
 export const store = legacy_createStore(persistedReducer,undefined,composedEnhancers);
+
+sagaMiddleWare.run(rootSaga);
 
 export const persistor = persistStore(store);

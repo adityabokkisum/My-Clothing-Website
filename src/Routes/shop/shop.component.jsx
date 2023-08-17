@@ -5,12 +5,12 @@ import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux"
 
 import "./shop.styles.scss"
-import { fetchCategoriesAsync } from "../../store/categories/categories.action";
+import { setCategoriesStart } from "../../store/categories/categories.action";
 
 const Shop = () => {
   const dispatch = useDispatch();
     useEffect(()=> {
-        dispatch(fetchCategoriesAsync)
+        dispatch(setCategoriesStart());
     },[])
     return(
    <Routes>

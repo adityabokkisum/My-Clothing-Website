@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithRedirect,signInWithPopup,GoogleAuthProvider,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged, reauthenticateWithCredential} from "firebase/auth"
+import { getAuth, signInWithRedirect,signInWithPopup,GoogleAuthProvider,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "firebase/auth"
 
 import {getFirestore,doc,setDoc,getDoc,collection,writeBatch,query,getDocs} from "firebase/firestore"
 
@@ -46,25 +46,25 @@ export const getCategoriesAndDocuments = async () => {
   return querySnapShot.docs.map(docSnapShot=>docSnapShot.data());
 }
 
-export const createUserDocumentFromAuth = async (userAuth) => {
+export const createUserDocumentFromAuth = async (userAuth,additionalDetails) => {
   if(!userAuth)return;
 
   const userDocRef = doc(db,"users",userAuth.uid);
 
   const userSnapshot = await getDoc(userDocRef);
   if (!userSnapshot.exists()) {
-    const {displayName, email} = userAuth;
+    const {email} = userAuth;
     const createdAt = new Date();
     try {
       await setDoc(userDocRef,{
-        displayName,
         email,
-        createdAt
+        createdAt,
+        ...additionalDetails
       });
     } catch (error) {
     }
   }
-  return userDocRef;
+  return userSnapshot;
 }
 
 export const createAuthUserWithEmailAndPassword = async(email,password) =>{
@@ -80,3 +80,12 @@ export const signInAuthUserWithEmailAndPassword = async (email,password) =>{
 export const signOutUser = async() => await signOut(auth);
 
 export const onAuthChangeHandler = (callback) => onAuthStateChanged(auth,callback)
+
+export const getCurrentUser = () => {
+  return new Promise((resolve,reject)=> {
+    const unSubsriber = onAuthStateChanged(auth,(user)=> {
+      resolve(user);
+      unSubsriber();
+    },reject);
+  })
+}

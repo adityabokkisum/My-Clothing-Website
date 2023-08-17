@@ -1,11 +1,13 @@
-import { useState,useContext } from "react";
+import { useState } from "react";
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
-import { signInWithGooglePopup,createUserDocumentFromAuth,signInAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
 
 import "./sign-in-form.styles.scss"
+import { useDispatch } from "react-redux";
+import { emailSignInStart, googleSignInStart } from "../../store/user/user.action";
 
 const SignInForm = () => {
+    const dispatch = useDispatch();
     const oDefaultFormFields ={
         email: "",
         password: ""
@@ -15,12 +17,12 @@ const SignInForm = () => {
     const resetFormFields = () =>{
         setFormDetails(oDefaultFormFields);
     };
-    const onSubmitHandler = async (oEvent) => {
+    const onSubmitHandler =  (oEvent) => {
         oEvent.preventDefault();
         const aHtmlFormInstance = Array.from(oEvent.target);
         const oCurrentState = getUserEnteredValues(aHtmlFormInstance);
         try {
-            await signInAuthUserWithEmailAndPassword(oCurrentState.email,oCurrentState.password);
+            dispatch(emailSignInStart(oCurrentState.email,oCurrentState.password));
             resetFormFields();
         } catch (error) {
         }
@@ -32,8 +34,8 @@ const SignInForm = () => {
         })
         return oValues;
     }
-    const signUsingWithGooglePopup = async() => {
-        await signInWithGooglePopup();
+    const signUsingWithGooglePopup = () => {
+        dispatch(googleSignInStart());
     }
     const onChangeHandler = (oEvent) => {
         const {name,value} = oEvent.target;
