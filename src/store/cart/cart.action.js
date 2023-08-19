@@ -12,3 +12,7 @@ export const addItemToCart = (cartItems) => {
 export const removeItemFromCart = (id,bRemoveTotalItem) => {
     return createAction(CART_ACTION_TYPES.REMOVE_CART_ITEM,{id,bRemoveTotalItem});
 }
+
+export const setTotalAmount = (iTotalAmount) => {
+    return createAction(CART_ACTION_TYPES.TOTAL_AMOUNT,iTotalAmount);
+}

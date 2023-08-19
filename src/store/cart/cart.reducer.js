@@ -2,7 +2,8 @@ import { CART_ACTION_TYPES } from "./cart.types";
 
 const INIT_STATE = {
     toggleState: false,
-    cartItems:[]
+    cartItems:[],
+    cartTotal: 0
 }
 
 const addCardItem = (productToAdd,{cartItems}) => {
@@ -52,6 +53,11 @@ export const cartReducer = (state = INIT_STATE,action) => {
             return {
                 ...state,
                 toggleState: payload
+            }
+        case CART_ACTION_TYPES.TOTAL_AMOUNT:
+            return {
+                ...state,
+                cartTotal: payload
             }
         default:
             return state;

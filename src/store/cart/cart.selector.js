@@ -13,6 +13,11 @@ const selectionCartToggleChangeIdentifier = createSelector(
     (cartSlice) => cartSlice.toggleState
 )
 
+const selectionCartTotalIdentifier = createSelector(
+    [selectionStateIdentifier],
+    (cartSlice) => cartSlice.cartTotal
+)
+
 export const selectorForCartItemsinCartReducer = createSelector(
     [selectionCartItemChangeIdentifier],
     (categories) => categories
@@ -21,4 +26,9 @@ export const selectorForCartItemsinCartReducer = createSelector(
 export const selectorForToggleStateInCartReducer = createSelector(
     [selectionCartToggleChangeIdentifier],
     (toggleState) => toggleState
+)
+
+export const selectorForTotalAmount = createSelector(
+    [selectionCartTotalIdentifier],
+    (cartTotal) => cartTotal
 )

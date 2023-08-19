@@ -1,12 +1,16 @@
 import { useContext } from "react";
 import "./checkout.styles.scss"
 import CheckOutItem from "../../components/checkout-item/checkout-item.component";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectorForCartItemsinCartReducer } from "../../store/cart/cart.selector";
+import PaymentForm from "../../components/payment-form/payment-form.component";
+import { setTotalAmount } from "../../store/cart/cart.action";
 
 const CheckOut = () => {
     const cartItems = useSelector(selectorForCartItemsinCartReducer);
     const totalAmount = cartItems.reduce((acc,curr)=>curr.quantity * curr.price + acc,0);
+    const dispatch =useDispatch();
+    dispatch(setTotalAmount(totalAmount))
     return (
         <div className="checkout-container">
             <div className="checkout-header">
@@ -32,7 +36,7 @@ const CheckOut = () => {
                 })
             }
             <h2 className="total">Total : {"$" + " " + totalAmount}</h2>
-
+            <PaymentForm/>
         </div>
     )
 }
