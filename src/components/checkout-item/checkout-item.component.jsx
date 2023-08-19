@@ -1,6 +1,6 @@
 import "./checkout-item.styles.scss"
 import { useDispatch} from "react-redux";
-import { addItemToCart, removeItemFromCart } from "../../store/cart/cart.action";
+import { addItemToCart, removeItemFromCart } from "../../store/cart/cart.reducer";
 
 const CheckOutItem = ({cartItem}) => {
     const {imageUrl,price,quantity,name,id} = cartItem;
@@ -10,7 +10,7 @@ const CheckOutItem = ({cartItem}) => {
         dispatch(addItemToCart(cartItem));
     };
     const onRemoveItem = (bRemoveTotalItem) => {
-        dispatch(removeItemFromCart(id,bRemoveTotalItem));
+        dispatch(removeItemFromCart({id,bRemoveTotalItem}));
     };
     return (
         <div className="checkout-item-container">

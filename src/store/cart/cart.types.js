@@ -1,5 +1,0 @@
-export const CART_ACTION_TYPES = {
-    ADD_CART_ITEM: "cart/ADD_CART_ITEM",
-    REMOVE_CART_ITEM: "cart/REMOVE_CART_ITEM",
-    TOGGLE_STATE: "cart/TOGGLE_STATE"
-}

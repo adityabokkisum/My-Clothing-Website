@@ -2,7 +2,7 @@ import {ReactComponent as ShoppingIcon} from "../../assets/shopping-bag.svg"
 import "./cart-icon.styles.scss"
 import { useDispatch, useSelector } from "react-redux";
 import { selectorForCartItemsinCartReducer, selectorForToggleStateInCartReducer } from "../../store/cart/cart.selector";
-import { setToggleState } from "../../store/cart/cart.action";
+import { setToggleState } from "../../store/cart/cart.reducer";
 
 const CartIcon = () => {
     const cartItems = useSelector(selectorForCartItemsinCartReducer);

@@ -1,7 +1,7 @@
 import Button from "../button/button.component"
 import "./product-card.styles.scss"
 import { useDispatch } from "react-redux";
-import { addItemToCart } from "../../store/cart/cart.action";
+import { addItemToCart } from "../../store/cart/cart.reducer";
 
 const ProductCard = ({product}) => {
     const {name,price,imageUrl} = product;

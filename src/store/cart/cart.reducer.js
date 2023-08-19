@@ -1,4 +1,4 @@
-import { CART_ACTION_TYPES } from "./cart.types";
+import { createSlice } from "@reduxjs/toolkit";
 
 const INIT_STATE = {
     toggleState: false,
@@ -32,28 +32,22 @@ const getItemById = (id,cartItems) => {
 }
 
 
-export const cartReducer = (state = INIT_STATE,action) => {
-    const {type,payload} = action;
-    let newCartItems = [];
-    switch (type) {
-        case CART_ACTION_TYPES.ADD_CART_ITEM:
-            newCartItems = addCardItem(payload,state);
-            return {
-                ...state,
-                cartItems: newCartItems
-            }
-        case CART_ACTION_TYPES.REMOVE_CART_ITEM:
-            newCartItems = removeCartItem(payload,state);
-            return {
-                ...state,
-                cartItems: newCartItems
-            }
-        case CART_ACTION_TYPES.TOGGLE_STATE:
-            return {
-                ...state,
-                toggleState: payload
-            }
-        default:
-            return state;
+export const cartSlice = createSlice({
+    name: "cart",
+    initialState: INIT_STATE,
+    reducers: {
+        setToggleState(state,action) {
+            state.toggleState = action.payload
+        },
+        addItemToCart(state,action) {
+            state.cartItems = addCardItem(action.payload,JSON.parse(JSON.stringify(state)));
+        },
+        removeItemFromCart(state,action) {
+            state.cartItems = removeCartItem(action.payload,JSON.parse(JSON.stringify(state)));
+        }
     }
-}
+})
+
+export const {setToggleState,addItemToCart,removeItemFromCart} = cartSlice.actions;
+
+export const cartReducer = cartSlice.reducer;
